@@ -1,0 +1,11 @@
+<div layout="row" class="navbar">
+    <div layout="column" id="page-title">
+        <h1>Instapic</h1>
+    </div>
+    <div layout="column" id="page-context">
+        <h1>{{user.first_name + ' ' + user.last_name}}</h1>
+    </div>
+    <div layout="column" id="button-context">
+        <button ng-if="status.isUserPresent" ng-click="logOut()">Log Out</button>
+    </div>
+</div>

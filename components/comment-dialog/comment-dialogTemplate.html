@@ -1,0 +1,26 @@
+<md-dialog aria-label="Add a new Comment">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Add a new Comment!</h2>
+                <span flex></span>
+                <!--dialog close button-->
+                <md-button class="md-icon-button" ng-click="cancelDialog()">
+                  <md-icon md-svg-src="images/icons/ic_clear_white_24px.svg" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <textarea ng-model='state.comment' class='comment-textarea'></textarea>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+          <md-button type='submit' ng-click="submitComment()">
+            Submit
+          </md-button>
+      </md-dialog-actions>
+    </form>
+</md-dialog>

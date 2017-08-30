@@ -1,0 +1,56 @@
+#content-title {
+    text-align: center;
+}
+.comments-toolbar {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background-color: rgb(63,81,181);
+    color:white;
+    height:50px;
+}
+.comments-toolbar h4 {
+    text-align: center;
+    flex-grow: 3;
+    align-self: center;
+}
+.add-icon {
+    flex-grow:0;
+    cursor: pointer;
+    color:white;
+}
+/*
+ * container for one photo entry including its comments
+ */
+.photo-entry {
+    width:80%;
+    margin:20px;
+    padding:20px;
+    border: 1px solid #ededed;
+    border-radius:5px;
+    background-color: white;
+}
+.comments-container {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.comment {
+    border: 1px solid #d3d3d3;
+    border-top:none;
+    padding:10px;
+}
+.comment-user {
+    font-weight: bold;
+    outline: none;
+    text-decoration: none;
+    margin-right:10px;
+    font-size:24px;
+    color:#0d0070;
+}
+.comment-date {
+    color:#727272;
+}
+
+.comment-text {
+    color:#424242;
+}

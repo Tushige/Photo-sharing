@@ -1,0 +1,29 @@
+<div class="photos-container">
+    <h2 id="content-title">{{user.first_name}}'s photos</h2>
+    <div class="photo-entry" ng-repeat="photo in photos">
+        <img class="photo" src='images/{{photo.file_name}}'></img>
+        <h4>Posted on: {{photo.date_time}}</h4>
+
+        <!--Area where comments are displayed-->
+        <div class="comments-container">
+            <div class="comments-toolbar">
+                <h4>Comments</h4>
+                <md-icon ng-click='addComment($event, photo._id)'class='add-icon' md-svg-src="images/icons/ic_add_circle_white_24px.svg" aria-label='add comment' class="name">
+                </md-icon>
+            </div>
+            <!--list of comments-->
+            <div class="comment" ng-repeat="commentObj in photo.comments">
+                <a class="comment-user" href="#!users/{{commentObj.user._id}}">
+                    {{commentObj.user.first_name + ' ' + commentObj.user.last_name}}
+                </a>
+                <span class="comment-date">
+                    {{commentObj.date_time}}
+                </span>
+                <p class="comment-text">
+                    {{commentObj.comment}}
+                <p>
+            </div>
+
+        </div>
+    </div>
+<div>

@@ -1,0 +1,23 @@
+#user-profile {
+    margin-left: 20px;
+}
+#photo-btn {
+    padding:10px;
+    outline: none;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #13a2af;
+    background-color: white;
+    color:#13a2af;
+    width:200px;
+    height:50px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 22px;
+    transition: 0.3s;
+}
+#photo-btn:hover {
+    background-color: #13a2af;
+    color:white;
+    transition: 0.3s;
+}

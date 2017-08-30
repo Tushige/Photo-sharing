@@ -1,0 +1,18 @@
+#user-list-title {
+    text-align: center;
+}
+.username-container {
+    color:#004404;
+    padding:10px;
+    transition: 0.5s;
+}
+
+.username-container:hover {
+    background-color: #afe2ff;
+    transition: 0.5s;
+}
+.username-container a {
+    text-decoration: none;
+    color:#00215b;
+    font-weight: bold;
+}

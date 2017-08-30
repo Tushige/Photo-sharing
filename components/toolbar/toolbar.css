@@ -1,0 +1,16 @@
+.navbar-container {
+    min-width: 100%;
+    padding: 10px;
+}
+.navbar {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#page-title {
+    flex-grow: 3;
+}
+
+#page-context {
+    flex-grow: 0;
+}

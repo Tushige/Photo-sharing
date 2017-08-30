@@ -1,0 +1,14 @@
+/*
+CSS for the CS142 project #5 main page
+
+Since CSS uses a global name space for classes we should use class names starting with
+cs142-main- here.
+*/
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+#content {
+    padding-bottom:200px;
+}

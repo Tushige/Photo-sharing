@@ -1,0 +1,6 @@
+<div ng-if='user' id="user-list-container">
+    <h2 id="user-list-title">{{title.text}}</h2>
+    <div ng-repeat="user in users" class="username-container">
+        <a href="#!users/{{user._id}}">{{user.first_name + ' ' + user.last_name}}</a>
+    </div>
+</div>
