@@ -37,13 +37,17 @@
 
 var mongoose = require('mongoose');
 var async = require('async');
-
+var fs = require('fs');
 /*
  * NOTE: session data is stored server-side.
  *       session id is stored in cookie
  */
 var session = require('express-session');
 var bodyParser = require('body-parser');
+/*
+ * we use multer to process a POST request with form containing a file.
+ * bodyParser cannot handle it.
+ */
 var multer = require('multer');
 
 // Load the Mongoose schema for User, Photo, and SchemaInfo
@@ -71,6 +75,12 @@ app.use(session({secret: 'secretKey', resave:false, saveUninitialized: false}));
  * object after the middleware)
  */
 app.use(bodyParser.json());
+
+/**
+ * @param processFormBody (function)
+ *
+ */
+var processFormBody = multer({storage: multer.memoryStorage()}).single('uploadedPhoto');
 
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
@@ -339,7 +349,40 @@ app.post('/commentsOfPhoto/:photo_id', function(req, res) {
  * responds with status 400 if photo file is absent
  */
 app.post('/photos/new', function(req, res) {
-
+    processFormBody(req, res, function(err) {
+        if (err) {
+            res.status(400).end(JSON.string(err));
+            return;
+        } else if (!req.file) {
+            res.status(400).end('file not found');
+            return;
+        }
+        // request.file has the following properties of interest
+        //      fieldname      - Should be 'uploadedphoto' since that is what we sent
+        //      originalname:  - The name of the file the user uploaded
+        //      mimetype:      - The mimetype of the image (e.g. 'image/jpeg',  'image/png')
+        //      buffer:        - A node Buffer containing the contents of the file
+        //      size:          - The size of the file in bytes
+        const timestamp = new Date().valueOf();
+        const filename = 'U' + String(timestamp) + req.file.originalname;
+        // write the file to images directory
+        fs.writeFile('./images/'+filename, req.file.buffer, function(err) {
+            if (err) {
+                res.status(500).end('problem saving file');
+                return;
+            }
+            // create the photo object in the database
+            Photo.create({
+                file_name: filename,
+                date_time: timestamp,
+                user_id: req.session.user._id,
+                comments: []
+            }, function(err, photoObj) { // invoked when photo object is created
+                photoObj.save();
+                res.status(200).end();
+            });
+        });
+    });
 });
 var server = app.listen(3000, function () {
     var port = server.address().port;

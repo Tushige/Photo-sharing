@@ -8,4 +8,8 @@
     <div layout="column" id="button-context">
         <button ng-if="status.isUserPresent" ng-click="logOut()">Log Out</button>
     </div>
+    <div layout="row" ng-if="status.isUserPresent">
+        <input type="file" accept="image/*" my-file-change="inputFileNameChanged"></input>
+        <button ng-click="uploadPhoto()">Upload</input>
+    </div>
 </div>

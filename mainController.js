@@ -28,7 +28,6 @@ cs142App.config(['$resourceProvider', function($resourceProvider) {
 }]);
 cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$resource',
     function ($scope, $rootScope, $location, $resource) {
-        console.log('mainController executed');
         $scope.main = {};
         //$rootScope.user = null;
         $scope.main.title = 'Users';

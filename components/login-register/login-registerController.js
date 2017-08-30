@@ -10,7 +10,6 @@ cs142App.controller('Login-registerController',
             username: ''
         };
         $scope.loginHandler = function() {
-            console.log('submitting login request');
             const loginUrl = '/admin/login';
             const params = {};
             const actions = {'login' : {method:'POST', isArray:false}};
@@ -23,7 +22,7 @@ cs142App.controller('Login-registerController',
                 $rootScope.user = user;
                 $location.path('/user/list');
             }, function(err) {
-                console.error(err);
+                alert('failed to login');
             });
         }
     }]);
