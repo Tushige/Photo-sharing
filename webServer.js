@@ -5,7 +5,7 @@
 /*
  * This builds on the webServer of previous projects in that it exports the current
  * directory via webserver listing on a hard code (see portno below) port. It also
- * establishes a connection to the MongoDB named 'cs142project6'.
+ * establishes a connection to the MongoDB named 'cs142project7'.
  *
  * To start the webserver run the command:
  *    node webServer.js
@@ -38,6 +38,7 @@
 var mongoose = require('mongoose');
 var async = require('async');
 var fs = require('fs');
+const cs142password = require('./cs142password.js');
 /*
  * NOTE: session data is stored server-side.
  *       session id is stored in cookie
@@ -58,7 +59,7 @@ var SchemaInfo = require('./schema/schemaInfo.js');
 var express = require('express');
 var app = express();
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/cs142project7');
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all
 // the work for us.
@@ -287,16 +288,20 @@ app.post('/admin/login', function(req, res) {
     const username = req.body.login_name;
     const password = req.body.password;
     // 2. check if user with given credentials exists
-    User.findOne({login_name: username, password: password}, function(err, user) {
+    User.findOne({
+        login_name: username,
+    }, function(err, user) {
         if (err) {
             res.status(500).end('Something went wrong. Please try again');
             return;
         }
-        if (!user) { // user not found
+        // check if passwords match
+        const passwordMatch = cs142password.doesPasswordMatch(user.password_digest, user.salt, password);
+        if (!user || !passwordMatch) { // user not found
             res.status(400).end('one or more fields are incorrect!');
             return;
         }
-        // 3. save user in express session
+        // 3. good - save user in express session
         req.session.user = user;
         res.status(200).end(JSON.stringify(user));
     });
@@ -411,15 +416,6 @@ app.post('/user', function(req, res) {
         res.status(400).end('required fields are missing');
         return;
     }
-    const newUser = {
-            login_name: req.body.login_name,
-            password: req.body.password,
-            first_name: req.body.first_name,
-            last_name: req.body.last_name,
-            location: req.body.location? req.body.location : '',
-            description: req.body.description? req.body.description : '',
-            occupation: req.body.occupation ? req.body.occupation : ''
-    };
     /**
      * don't register if login_name is unavailable
      */
@@ -429,6 +425,18 @@ app.post('/user', function(req, res) {
             return;
         }
     });
+    const password = cs142password.makePasswordEntry(req.body.password);
+    const newUser = {
+            login_name: req.body.login_name,
+            password_digest: password.hash,
+            salt: password.salt,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            location: req.body.location? req.body.location : '',
+            description: req.body.description? req.body.description : '',
+            occupation: req.body.occupation ? req.body.occupation : ''
+    };
+
     /**
      * save new user in the DB
      */

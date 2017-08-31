@@ -20,7 +20,7 @@ describe('cs142 password api test', function() {
 
       it('can make a password with a hash and salt', function(done) {
          var pwd = cs142password.makePasswordEntry('TestPassword');
-	      assert.strictEqual(typeof pwd, 'object');
+	     assert.strictEqual(typeof pwd, 'object');
          assert.strictEqual(typeof pwd.hash, 'string');
          assert.strictEqual(pwd.hash.length, 40);
          assert.strictEqual(typeof pwd.salt, 'string');

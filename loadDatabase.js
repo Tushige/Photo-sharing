@@ -21,11 +21,11 @@
 
 // Get the magic models we used in the previous projects.
 var cs142models = require('./modelData/photoApp.js');
-
+var cs142password = require('./cs142password');
 // We use the Mongoose to define the schema stored in MongoDB.
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/cs142project6');
+mongoose.connect('mongodb://localhost/cs142project7');
 
 // Load the Mongoose schema for Use and Photo
 var User = require('./schema/user.js');
@@ -46,6 +46,7 @@ Promise.all(removePromises).then(function () {
     var userModels = cs142models.userListModel();
     var mapFakeId2RealId = {}; // Map from fake id to real Mongo _id
     var userPromises = userModels.map(function (user) {
+        const password = cs142password.makePasswordEntry('weak');
         return User.create({
             first_name: user.first_name,
             last_name: user.last_name,
@@ -53,7 +54,8 @@ Promise.all(removePromises).then(function () {
             description: user.description,
             occupation: user.occupation,
             login_name: user.last_name.toLowerCase(),
-            password: 'weak'
+            password_digest: password.hash,
+            salt: password.salt
         }, function (err, userObj) {
             if (err) {
                 console.error('Error create user', err);
