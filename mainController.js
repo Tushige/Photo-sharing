@@ -1,6 +1,6 @@
 'use strict';
 
-var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource']);
+var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource', 'ngMessages']);
 
 cs142App.config(['$routeProvider',
     function ($routeProvider) {
@@ -15,7 +15,7 @@ cs142App.config(['$routeProvider',
             }).
             when('/register', {
                 templateUrl: 'components/register/registerTemplate.html',
-                controller: 'registerController'
+                controller: 'RegisterController'
             }).
             when('/login', {
                 templateUrl: 'components/login/loginTemplate.html',

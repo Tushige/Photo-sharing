@@ -1,0 +1,77 @@
+<md-content class="md-no-momentum"layout-padding>
+    <form name='registrationForm' ng-submit='submitHandler($event)'>
+        <div layout-gt-sm='row'>
+
+            <!--First Name-->
+            <md-input-container class='md-icon-float md-block' flex-gt-sm>
+                <label>First Name</label>
+                <input required type='text' ng-model='submission.first_name' name='first_name'></input>
+                <div ng-messages='registrationForm.first_name.$error'>
+                    <div ng-message='required'>This is required</div>
+                </div>
+            </md-input-container>
+
+            <!--Last Name-->
+            <md-input-container class='md-icon-float md-block' flex-gt-sm>
+                <label>Last Name</label>
+                <input required type='text' ng-model='submission.last_name'></input>
+                <div ng-messages='registrationForm.last_name.$error'>
+                    <div ng-message='required'>This is required</div>
+                </div>
+            </md-input-container>
+        </div>
+
+        <!--username-->
+        <md-input-container class='md-icon-float md-block' flex-gt-sm>
+            <label>username</label>
+            <input required type='text' ng-model='submission.login_name'></input>
+            <div ng-messages='registrationForm.username.$error'>
+                <div ng-message='required'>This is required</div>
+            </div>
+        </md-input-container>
+
+        <!--password-->
+        <md-input-container class='md-icon-float md-block' flex-gt-sm>
+            <label>password</label>
+            <input required name='password' type='password' ng-model='submission.password'></input>
+            <div ng-messages='registrationForm.password.$error'>
+                <div ng-message='required'>This is required</div>
+            </div>
+        </md-input-container>
+
+        <!--verify password-->
+        <md-input-container class='md-icon-float md-block' flex-gt-sm>
+            <label>verify password</label>
+            <input required name='verify_password' type='password' ng-model='submission.verify_password' ng-change='checkPassword()'></input>
+            <div ng-messages='registrationForm.verify_password.$error'>
+                <div ng-message='required'>This is required</div>
+                <div ng-message='verificationError'>passwords do not match</div>
+            </div>
+            <pre> registrationForm.verify_password.$error = {{registrationForm.verify_password.$error | json }}</pre>
+        </md-input-container>
+
+        <!--Address-->
+        <md-input-container md-no-float class='md-block'>
+            <label>address</label>
+            <input ng-model="submission.address" type="text">
+            <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
+        </md-input-container>
+
+        <!--Occupation-->
+        <md-input-container md-no-float class='md-block'>
+            <label>occupation</label>
+          <input ng-model="submission.occupation" type="text">
+          <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
+        </md-input-container>
+
+        <!--Biography-->
+        <md-input-container class='md-block'>
+            <label>Biography</label>
+            <textarea ng-model='submission.description' md-maxlength='150' row='5' md-select-on-focus>
+            </textarea>
+        </md-input-container>
+
+        <!--SUBMIT button-->
+        <md-button type='submit' ng-disabled='registrationForm.$invalid'>Register Me!</md-button>
+    </form>
+</md-content>
