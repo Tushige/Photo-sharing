@@ -13,9 +13,13 @@ cs142App.config(['$routeProvider',
                 templateUrl: 'components/user-photos/user-photosTemplate.html',
                 controller: 'UserPhotosController'
             }).
-            when('/login-register', {
-                templateUrl: 'components/login-register/login-registerTemplate.html',
-                controller: 'Login-registerController'
+            when('/register', {
+                templateUrl: 'components/register/registerTemplate.html',
+                controller: 'registerController'
+            }).
+            when('/login', {
+                templateUrl: 'components/login/loginTemplate.html',
+                controller:'LoginController'
             }).
             otherwise({
                 redirectTo: '/users'
@@ -37,8 +41,9 @@ cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$re
          */
         $rootScope.$on('$routeChangeStart', function(angularEvent, next, current) {
             if (!$rootScope.isLoggedIn()) {
-                if (next.templateUrl !== 'components/login-register/login-registerTemplate.html') {
-                    $location.path('/login-register');
+                if (next.templateUrl !== 'components/register/registerTemplate.html' &&
+                    next.templateUrl !== 'components/login/loginTemplate.html') {
+                    $location.path('/register');
                 }
             }
         });

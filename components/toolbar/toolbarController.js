@@ -46,7 +46,7 @@ cs142App.controller("ToolbarController",
             const authResource = $resource(logOutUrl, params, actions);
             authResource.logout({}, function() {
                 $rootScope.user = null;
-                $location.path('/login-register');
+                $location.path('/register');
             }, function(err) {
                 if (err) {
                     console.log(err);

@@ -384,6 +384,43 @@ app.post('/photos/new', function(req, res) {
         });
     });
 });
+/**
+ * registers a new user.
+ *
+ * expects the following in the body:
+ * 1. login_name (required)
+ * 2. password (required)
+ * 3. first_name (required)
+ * 4. last_name (required)
+ * 5. location (optional)
+ * 6. description (optional)
+ * 7. occupation (optional)
+ * If any of the above expectations are not met, responds with status of 400
+ */
+app.post('/user', function(req, res) {
+    if (!req.body.login_name || !req.body.password || !req.body.first_name || !req.body.last_name) {
+        res.status(400).end('required fields are missing');
+        return;
+    }
+    const newUser = {
+            login_name: req.body.login_name,
+            password: req.body.password,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            location: req.body.location? req.body.location : '',
+            description: req.body.description? req.body.description : '',
+            occupation: req.body.occupation ? req.body.occupation : ''
+    };
+    User.create(newUser, function(err, userObj) {
+        if (err) {
+            res.status(500).end('user registration failed');
+            return;
+        }
+        userObj.save();
+        res.status(200).end();
+    })
+});
+
 var server = app.listen(3000, function () {
     var port = server.address().port;
     console.log('Listening at http://localhost:' + port + ' exporting the directory ' + __dirname);
