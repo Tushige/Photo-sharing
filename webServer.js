@@ -275,9 +275,10 @@ function addUserToComment(comment, doneCommentUpdate) {
         doneCommentUpdate(null, commentWithUser);
     });
 }
-/*
+/**
  * logs in a user
  * expectations: there is a property of 'login_name' in the request body
+ * @return: on successful login, sends user object in the response body
  */
 app.post('/admin/login', function(req, res) {
     // 1. retrieve login_name
@@ -297,6 +298,7 @@ app.post('/admin/login', function(req, res) {
         res.status(200).end(JSON.stringify(user));
     })
 });
+
 /**
  * logs user out by destroying current session object
  */
@@ -313,6 +315,7 @@ app.post('/admin/logout', function(req, res) {
         res.status(400).end();
     }
 });
+
 /**
  * posts a photo comment
  * expects a 'comment' property in body field
@@ -344,7 +347,8 @@ app.post('/commentsOfPhoto/:photo_id', function(req, res) {
         res.status(200).end();
     });
 });
-/*
+
+/**
  * uploads a photo for the current user
  * responds with status 400 if photo file is absent
  */
@@ -398,6 +402,8 @@ app.post('/photos/new', function(req, res) {
  * If any of the above expectations are not met, responds with status of 400
  */
 app.post('/user', function(req, res) {
+    console.log('received request for new user registration');
+    console.log(req.body);
     if (!req.body.login_name || !req.body.password || !req.body.first_name || !req.body.last_name) {
         res.status(400).end('required fields are missing');
         return;
@@ -417,7 +423,7 @@ app.post('/user', function(req, res) {
             return;
         }
         userObj.save();
-        res.status(200).end();
+        res.status(200).end(JSON.stringify(userObj));
     })
 });
 

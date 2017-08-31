@@ -49,7 +49,7 @@ cs142App.controller("ToolbarController",
                 $location.path('/register');
             }, function(err) {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     return;
                 }
             });

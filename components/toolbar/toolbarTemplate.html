@@ -1,15 +1,24 @@
 <div layout="row" class="navbar">
+    <!--web app title-->
     <div layout="column" id="page-title">
         <h1>Instapic</h1>
     </div>
-    <div layout="column" id="page-context">
-        <h1>{{user.first_name + ' ' + user.last_name}}</h1>
-    </div>
-    <div layout="column" id="button-context">
-        <button ng-if="status.isUserPresent" ng-click="logOut()">Log Out</button>
-    </div>
-    <div layout="row" ng-if="status.isUserPresent">
-        <input type="file" accept="image/*" my-file-change="inputFileNameChanged"></input>
-        <button ng-click="uploadPhoto()">Upload</input>
+    <!--displays info for verified users-->
+    <div layout="column" ng-if='status.isUserPresent' class=verified-toolbar>
+
+        <div layout="row" id="page-context">
+            <h1>{{user.first_name + ' ' + user.last_name}}</h1>
+        </div>
+        <!--LOG OUT button-->
+        <div layout="row" id="button-context">
+            <button id='logout-btn'ng-click="logOut()">Log Out</button>
+        </div>
+
+        <!--File upload-->
+        <div layout="row">
+            <label for='picture-upload' id='select-picture'>Select Picture</label>
+            <input id='picture-upload' type="file" accept="image/*" my-file-change="inputFileNameChanged"></input>
+            <button id='upload-btn' ng-click="uploadPhoto()">Upload</input>
+        </div>
     </div>
 </div>

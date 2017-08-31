@@ -24,7 +24,7 @@
         <!--username-->
         <md-input-container class='md-icon-float md-block' flex-gt-sm>
             <label>username</label>
-            <input required type='text' ng-model='submission.login_name'></input>
+            <input required type='text' ng-model='submission.username'></input>
             <div ng-messages='registrationForm.username.$error'>
                 <div ng-message='required'>This is required</div>
             </div>
@@ -53,7 +53,7 @@
         <!--Address-->
         <md-input-container md-no-float class='md-block'>
             <label>address</label>
-            <input ng-model="submission.address" type="text">
+            <input ng-model="submission.location" type="text">
             <md-icon md-svg-src="img/icons/ic_place_24px.svg" style="display:inline-block;"></md-icon>
         </md-input-container>
 
