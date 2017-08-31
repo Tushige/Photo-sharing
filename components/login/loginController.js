@@ -7,14 +7,18 @@ cs142App.controller('LoginController',
      '$location',
     function($rootScope, $scope, $resource, $location) {
         $scope.credentials = {
-            username: ''
+            username: '',
+            password: ''
         };
         $scope.loginHandler = function() {
             const loginUrl = '/admin/login';
             const params = {};
             const actions = {'login' : {method:'POST', isArray:false}};
             const loginResource = $resource(loginUrl, params, actions);
-            loginResource.login({login_name:$scope.credentials.username}, function(user) {
+            loginResource.login({
+                login_name:$scope.credentials.username,
+                password: $scope.credentials.password
+            }, function(user) {
                 if (!user) {
                     console.error("login failed because no user");
                     return;
@@ -22,7 +26,7 @@ cs142App.controller('LoginController',
                 $rootScope.user = user;
                 $location.path('/user/list');
             }, function(err) {
-                alert('failed to login');
+                alert(err.data);
             });
         }
     }]);

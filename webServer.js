@@ -277,26 +277,29 @@ function addUserToComment(comment, doneCommentUpdate) {
 }
 /**
  * logs in a user
- * expectations: there is a property of 'login_name' in the request body
+ * expectations: following properties must be found in the body
+ *  1. login_name
+ *  2. password
  * @return: on successful login, sends user object in the response body
  */
 app.post('/admin/login', function(req, res) {
-    // 1. retrieve login_name
+    // 1. retrieve user credentials from the body
     const username = req.body.login_name;
-    // 2. check if user with login_name exists
-    User.findOne({login_name: username}, function(err, user) {
+    const password = req.body.password;
+    // 2. check if user with given credentials exists
+    User.findOne({login_name: username, password: password}, function(err, user) {
         if (err) {
-            res.status(500).end();
+            res.status(500).end('Something went wrong. Please try again');
             return;
         }
         if (!user) { // user not found
-            res.status(400).end();
+            res.status(400).end('one or more fields are incorrect!');
             return;
         }
         // 3. save user in express session
         req.session.user = user;
         res.status(200).end(JSON.stringify(user));
-    })
+    });
 });
 
 /**
@@ -399,11 +402,11 @@ app.post('/photos/new', function(req, res) {
  * 5. location (optional)
  * 6. description (optional)
  * 7. occupation (optional)
+ * @return:
  * If any of the above expectations are not met, responds with status of 400
+ * if username is taken, responds with status of 409
  */
 app.post('/user', function(req, res) {
-    console.log('received request for new user registration');
-    console.log(req.body);
     if (!req.body.login_name || !req.body.password || !req.body.first_name || !req.body.last_name) {
         res.status(400).end('required fields are missing');
         return;
@@ -417,6 +420,18 @@ app.post('/user', function(req, res) {
             description: req.body.description? req.body.description : '',
             occupation: req.body.occupation ? req.body.occupation : ''
     };
+    /**
+     * don't register if login_name is unavailable
+     */
+    User.findOne({login_name: newUser.login_name}, function(err, userObj) {
+        if (userObj) {
+            res.status(409).end('username is taken');
+            return;
+        }
+    });
+    /**
+     * save new user in the DB
+     */
     User.create(newUser, function(err, userObj) {
         if (err) {
             res.status(500).end('user registration failed');

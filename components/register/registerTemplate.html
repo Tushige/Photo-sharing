@@ -24,9 +24,10 @@
         <!--username-->
         <md-input-container class='md-icon-float md-block' flex-gt-sm>
             <label>username</label>
-            <input required type='text' ng-model='submission.username'></input>
+            <input required name='username' type='text' ng-model='submission.username' ng-change='usernameChangeHandler()'></input>
             <div ng-messages='registrationForm.username.$error'>
                 <div ng-message='required'>This is required</div>
+                <div ng-message='conflictError'>username is already taken</div>
             </div>
         </md-input-container>
 
@@ -47,7 +48,6 @@
                 <div ng-message='required'>This is required</div>
                 <div ng-message='verificationError'>passwords do not match</div>
             </div>
-            <pre> registrationForm.verify_password.$error = {{registrationForm.verify_password.$error | json }}</pre>
         </md-input-container>
 
         <!--Address-->

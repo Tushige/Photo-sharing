@@ -1,17 +1,28 @@
 <md-content class="md-no-momentum">
     <form name='login-form'>
+        <!-- username field-->
         <md-input-container class="md-icon-float md-block">
-         <!-- Use floating label instead of placeholder -->
          <label>Name</label>
          <md-icon md-svg-src="images/icons/ic_person_outline_black_24px.svg" class="name"></md-icon>
-         <input ng-model="credentials.username" type="text" name='username'>
+         <input required md-min-length='5' ng-model="credentials.username" type="text" name='username'>
          <div ng-messages='login-form.username.$error'>
              <div ng-message='required'> This is required.</div>
              <div ng-message='md-minlength'>username must be at least 8 characters long.</div>
          </div>
-         <div>
-             <md-button type="submit" ng-click='loginHandler()'>Submit</md-button>
+        </md-input-container>
+        
+        <!-- password field -->
+        <md-input-container class="md-icon-float md-block">
+         <label>password</label>
+         <md-icon md-svg-src="images/icons/ic_person_outline_black_24px.svg" class="name"></md-icon>
+         <input required md-min-length='5' ng-model="credentials.password" type="text" name='password'>
+         <div ng-messages='login-form.password.$error'>
+             <div ng-message='required'> This is required.</div>
+             <div ng-message='md-minlength'>password must be at least 5 characters long.</div>
          </div>
+        </md-input-container>
+        <div>
+            <md-button type="submit" ng-click='loginHandler()'>Submit</md-button>
+        </div>
      </form>
-   </md-input-container>
 </md-content>

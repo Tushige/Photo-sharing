@@ -25,6 +25,15 @@ cs142App.controller('RegisterController',
             }
         }
         /**
+         * removes custom error messages when user modifies his/her input
+         * if there are error messages
+         */
+         $scope.usernameChangeHandler = function() {
+             if ($scope.registrationForm.username.$error.conflictError) {
+                 $scope.registrationForm.username.$setValidity('conflictError', true);
+             }
+         }
+        /**
          * registers user
          */
         $scope.submitHandler = function(ev) {
@@ -38,19 +47,22 @@ cs142App.controller('RegisterController',
                 description: $scope.submission.description,
                 occupation: $scope.submission.occupation
             };
-            console.log('newUser: ', newUser);
             const params = {};
             const actions = {'registerUser': {method: 'POST', isArray: false}};
             const userResource = $resource('/user', params, actions);
             /**
              * registers the new user with the backend
+             * if username is unavailable, displays error message for the user
              */
             userResource.registerUser(newUser, function success(newUser) {
                 // registration successful
                 $scope.login(newUser);
             }, function failure(err) {
-                alert('registration failed');
-                console.error(err);
+                if (err.status === 409) {
+                    $scope.registrationForm.username.$setValidity('conflictError', false);
+                } else {
+                    alert(err.data);
+                }
             });
         }
         /**
@@ -66,14 +78,10 @@ cs142App.controller('RegisterController',
                 login_name:user.login_name,
                 password: user.password
             }, function success(user) {
-                if (!user) {
-                    console.error("login failed because no user");
-                    return;
-                }
                 $rootScope.user = user;
                 $location.path('/user/list');
             }, function failure(err) {
-                alert('failed to login');
+                alert(err.data);
             });
         }
     }]);
