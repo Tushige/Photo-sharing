@@ -10,7 +10,7 @@ var http = require('http');
 var async = require('async');
 var _ = require('lodash');
 
-var cs142models = require('../modelData/photoApp.js').cs142models;
+var cs142models = require('../modelData/photoApp.js');
 
 var port = 3000;
 var host = 'localhost';
