@@ -5,14 +5,10 @@ cs142App.controller('UserListController',
      '$scope',
      '$resource',
     function ($rootScope, $scope, $resource) {
-        $scope.title = {
-            text: ''
-        };
-
-        /**
-         * retrieve list of users from backend server when user is logged in
-         */
-        $scope.$on('logged-in', function() {
+        $scope.populateFriends = function() {
+            $scope.title = {
+                text: ''
+            };
             // grab users from the model
             $scope.users = null;
             $scope.title.text = 'Friends';
@@ -23,6 +19,15 @@ cs142App.controller('UserListController',
             }, function(err) {
                 console.error(err);
             });
+        };
+        if ($rootScope.isLoggedIn()) {
+            $scope.populateFriends();
+        }
+        /**
+         * retrieve list of users from backend server when user is logged in
+         */
+        $scope.$on('logged-in', function() {
+            $scope.populateFriends();
         });
         $scope.$on('logged-out', function() {
             $scope.users = null;

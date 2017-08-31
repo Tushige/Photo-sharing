@@ -5,7 +5,8 @@ cs142App.controller('LoginController',
      '$scope',
      '$resource',
      '$location',
-    function($rootScope, $scope, $resource, $location) {
+     '$window',
+    function($rootScope, $scope, $resource, $location, $window) {
         $scope.credentials = {
             username: '',
             password: ''
@@ -23,6 +24,7 @@ cs142App.controller('LoginController',
                     console.error("login failed because no user");
                     return;
                 }
+                $window.localStorage.setItem('user', user);
                 $rootScope.user = user;
                 $location.path('/user/list');
             }, function(err) {

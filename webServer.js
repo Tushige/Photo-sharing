@@ -163,10 +163,20 @@ app.get('/user/list', function (request, response) {
     }
     User.find({}, function(err, users) {
         if (err) {
-            console.log('here');
             response.status(500).send(JSON.stringify(err));
         }
-        response.status(200).send(JSON.stringify(users));
+        /**
+         * In anticipation of large number of users, select fields that are
+         * needed by the app's navigation bar only.
+         */
+        const usersList = users.map((user) =>{
+            return {
+                _id: user._id,
+                first_name: user.first_name,
+                last_name: user.last_name
+            };
+        });
+        response.status(200).send(JSON.stringify(usersList));
     });
 });
 
@@ -179,18 +189,23 @@ app.get('/user/:id', function (request, response) {
         return;
     }
     var id = request.params.id;
+    const numParam = Object.keys(request.params).length;
+    if (!id || numParam > 1) {
+        response.status(400).end('invalid query parameters');
+        return;
+    }
     User.findOne({_id: id}, function(err, userObj) {
         if (err) {
-            response.status(500).end(JSON.stringify(err));
+            response.status(400).end(JSON.stringify(err));
             return;
         }
         if (!userObj) {
-            console.log("400168");
-            response.status(400).end("NOT FOUND!");
+            response.status(400).end("user not found!");
             return;
         }
         // we select fields we want
         const user = {
+            _id: userObj._id,
             first_name : userObj.first_name,
             last_name : userObj.last_name,
             location : userObj.location,
@@ -198,7 +213,7 @@ app.get('/user/:id', function (request, response) {
             occupation : userObj.occupation
         }
         response.status(200).send(JSON.stringify(user));
-    })
+    });
 });
 
 /*
@@ -209,14 +224,21 @@ app.get('/photosOfUser/:id', function (request, response) {
         response.status(401).send('unauthorized');
         return;
     }
-    var id = request.params.id;
+    var id = request.params.id;;
+    const numParam = Object.keys(request.params).length;
+    if (!id || numParam > 1) {
+        response.status(400).end('invalid query parameters');
+        return;
+    }
     // photosList : array of photos submitted by user with given id
     Photo.find({user_id : id}, function(err, photosList) {
         if (err) {
-            response.status(500).send(JSON.stringify(err));
+            response.status(400).send(JSON.stringify(err));
+            return;
         }
-        else if (photosList === null) {
+        else if (!photosList) {
             response.status(400).send(JSON.stringify("no photos"));
+            return;
         }
 
         /*
@@ -232,6 +254,7 @@ app.get('/photosOfUser/:id', function (request, response) {
             function doneAllPhotos(err, newPhotos) {
                 if (err) {
                     response.status(500).send(JSON.stringify(err));
+                    return;
                 }
                 response.status(200).send(JSON.stringify(newPhotos));
             });
@@ -252,6 +275,8 @@ function updateCommentsOfPhotoAsync(photo, donePhotoUpdate) {
              * and make our changes there.
              */
             const newPhoto = JSON.parse(JSON.stringify(photo));
+            // front-end doesn't care about mongoDB assigned version number
+            delete newPhoto.__v;
             newPhoto.comments = newComments;
             // indicate that our photo is done updating
             donePhotoUpdate(null, newPhoto);
@@ -271,8 +296,18 @@ function addUserToComment(comment, doneCommentUpdate) {
             callback("failed to fetch commentor", null);
             return;
         }
+        /**
+         * pick only the required fields
+         */
+        const minifiedUser = {
+            _id : user._id,
+            first_name: user.first_name,
+            last_name: user.last_name
+        };
         const commentWithUser = JSON.parse(JSON.stringify(comment));
-        commentWithUser.user = user;
+        commentWithUser.user = minifiedUser;
+        // don't need user_id since we have user field
+        delete commentWithUser.user_id;
         doneCommentUpdate(null, commentWithUser);
     });
 }

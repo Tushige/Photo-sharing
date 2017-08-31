@@ -7,7 +7,8 @@ cs142App.controller("ToolbarController",
      '$resource',
      '$location',
      '$http',
-    function($rootScope, $scope, $routeParams, $resource, $location, $http) {
+     '$window',
+    function($rootScope, $scope, $routeParams, $resource, $location, $http, $window) {
         /* $routeParams is filled asynchronously,
          * we read it once it is populated
          */
@@ -45,6 +46,7 @@ cs142App.controller("ToolbarController",
             const actions = {'logout' : {method:'POST', isArray:false}};
             const authResource = $resource(logOutUrl, params, actions);
             authResource.logout({}, function() {
+                $window.localStorage.removeItem('user');
                 $rootScope.user = null;
                 $location.path('/register');
             }, function(err) {

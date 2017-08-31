@@ -1,7 +1,6 @@
 'use strict';
 
 var cs142App = angular.module('cs142App', ['ngRoute', 'ngMaterial', 'ngResource', 'ngMessages']);
-
 cs142App.config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.
@@ -30,8 +29,12 @@ cs142App.config(['$resourceProvider', function($resourceProvider) {
   // Don't strip trailing slashes from calculated URLs
   $resourceProvider.defaults.stripTrailingSlashes = false;
 }]);
-cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$resource',
-    function ($scope, $rootScope, $location, $resource) {
+cs142App.controller('MainController', ['$scope', '$rootScope', '$location', '$resource', '$window',
+    function ($scope, $rootScope, $location, $resource, $window) {
+        // restore session data from localStorage
+        if ($window.localStorage['user']) {
+            $rootScope.user = $window.localStorage.getItem('user');
+        }
         $scope.main = {};
         //$rootScope.user = null;
         $scope.main.title = 'Users';
